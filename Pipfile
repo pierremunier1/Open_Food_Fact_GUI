@@ -5,11 +5,21 @@ verify_ssl = true
 
 [dev-packages]
 pylint = "*"
+autopep8 = "*"
 
 [packages]
 sqlalchemy = "*"
 request = "*"
 records = "*"
+flask-sqlalchemy = "*"
+mysqlclient = "*"
+mysql-connector-python-rf = "*"
+mysql-server = "*"
+libmysqlclient-dev = "*"
+mysql-client = "*"
+mysql-connector-python = "*"
+pathlib = "*"
+sqlalchemy-utils = "*"
 
 [requires]
 python_version = "3.6"
