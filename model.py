@@ -20,7 +20,7 @@ class Sqlconnection:
                 database=self.db_infos_db))
         self.engine.connect()
         self.metadata = MetaData(self.engine)
-        print('connected to database: ' + str(self.engine))
+        print('-> Connected to database: ' + str(self.engine))
 
 
     def table_setup(self):
@@ -28,7 +28,7 @@ class Sqlconnection:
         """check if table exist and create if not"""
 
         table_exist = self.engine.dialect.has_table(self.engine, self.variable_tablename)
-        print('Table "{}" exists: {}'.format(self.variable_tablename, table_exist))
+        print('-> Table "{}" exists: {}'.format(self.variable_tablename, table_exist))
 
             
         table = Table(self.variable_tablename, self.metadata,
@@ -40,7 +40,7 @@ class Sqlconnection:
     
         if table_exist == True:
             table.drop(self.engine)
-            print('Delete existing table..')
+            print('-> Delete existing table..')
 
         table.create(self.engine)
-        print('Table succesfully created!')
+        print('-> Table succesfully created!')
