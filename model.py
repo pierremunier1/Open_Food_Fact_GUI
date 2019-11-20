@@ -1,4 +1,5 @@
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String
+from sqlalchemy_utils import database_exists, create_database
 import config
 
 class Sqlconnection:
@@ -17,11 +18,17 @@ class Sqlconnection:
         self.engine = create_engine('mysql+mysqlconnector://{username}:{password}@localhost/{database}'.format(
                 username=self.db_infos_user,
                 password=self.db_infos_pwd,
-                database=self.db_infos_db))
+                database=self.db_infos_db,
+                ))
+
+        if not database_exists(self.engine.url):
+            print('-> Database not found..')
+            create_database(self.engine.url)
+            print('-> Database succesfully created')
+        
         self.engine.connect()
         self.metadata = MetaData(self.engine)
         print('-> Connected to database: ' + str(self.engine))
-
 
     def table_setup(self):
 
@@ -31,7 +38,7 @@ class Sqlconnection:
         print('-> Table "{}" exists: {}'.format(self.variable_tablename, table_exist))
 
             
-        table = Table(self.variable_tablename, self.metadata,
+        product = Table(self.variable_tablename, self.metadata,
                 Column('id', Integer),
                 Column('product_name', String(150)),
                 Column('ingredient', String(150)),
@@ -39,8 +46,8 @@ class Sqlconnection:
                 schema=self.db_infos_db)
     
         if table_exist == True:
-            table.drop(self.engine)
+            product.drop(self.engine)
             print('-> Delete existing table..')
 
-        table.create(self.engine)
+        product.create(self.engine)
         print('-> Table succesfully created!')

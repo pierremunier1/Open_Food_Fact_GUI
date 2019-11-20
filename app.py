@@ -14,6 +14,5 @@ def main():
     openff.model.table_setup()
     
     
-
 if __name__ == '__main__':
     main()
