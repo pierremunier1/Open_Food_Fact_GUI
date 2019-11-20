@@ -6,7 +6,8 @@ class Sqlconnection:
 
     def __init__(self):
         
-        self.variable_tablename = config.TABLE_PRODUCT
+        self.variable_table_product = config.TABLE_PRODUCT
+        self.variable_table_category = config.TABLE_CATEGORY
         self.db_infos_user = config.USER
         self.db_infos_pwd = config.PWD
         self.db_infos_db = config.DB
@@ -34,20 +35,32 @@ class Sqlconnection:
 
         """check if table exist and create if not"""
 
-        table_exist = self.engine.dialect.has_table(self.engine, self.variable_tablename)
-        print('-> Table "{}" exists: {}'.format(self.variable_tablename, table_exist))
+        table_exist = self.engine.dialect.has_table(self.engine, self.variable_table_product)
+        print('-> Table "{}" exists: {}'.format(self.variable_table_product, table_exist))
 
-            
-        product = Table(self.variable_tablename, self.metadata,
+        product = Table(self.variable_table_product, self.metadata,
+                Column('id', Integer),
+                Column('product_name', String(150)),
+                Column('ingredient', String(150)),
+                Column('nutriscore', String(1)),    
+                schema=self.db_infos_db)
+
+        table_exist = self.engine.dialect.has_table(self.engine, self.variable_table_category)
+        print('-> Table "{}" exists: {}'.format(self.variable_table_category, table_exist))
+
+        category = Table(self.variable_table_category, self.metadata,
                 Column('id', Integer),
                 Column('product_name', String(150)),
                 Column('ingredient', String(150)),
                 Column('nutriscore', String(1)),    
                 schema=self.db_infos_db)
     
+
         if table_exist == True:
             product.drop(self.engine)
-            print('-> Delete existing table..')
+            category.drop(self.engine)
+            print('-> Delete existing tables..')
 
         product.create(self.engine)
-        print('-> Table succesfully created!')
+        category.create(self.engine)
+        print('-> Tables succesfully created!')
