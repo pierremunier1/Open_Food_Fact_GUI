@@ -1,6 +1,10 @@
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String
+from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, ForeignKey
 from sqlalchemy_utils import database_exists, create_database
+from sqlalchemy.orm import relationship, sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
 import config
+from base import Base 
+
 
 class Sqlconnection:
 
@@ -12,6 +16,7 @@ class Sqlconnection:
         self.db_infos_pwd = config.PWD
         self.db_infos_db = config.DB
         
+        
     def connection_setup(self):
         
         """connection to database"""
@@ -22,45 +27,46 @@ class Sqlconnection:
                 database=self.db_infos_db,
                 ))
 
-        if not database_exists(self.engine.url):
-            print('-> Database not found..')
-            create_database(self.engine.url)
-            print('-> Database succesfully created')
-        
+        self.session = sessionmaker(bind=self.engine)
         self.engine.connect()
         self.metadata = MetaData(self.engine)
         print('-> Connected to database: ' + str(self.engine))
 
-    def table_setup(self):
+    def table_check(self):
 
         """check if table exist and create if not"""
 
         table_exist = self.engine.dialect.has_table(self.engine, self.variable_table_product)
         print('-> Table "{}" exists: {}'.format(self.variable_table_product, table_exist))
 
-        product = Table(self.variable_table_product, self.metadata,
-                Column('id', Integer),
-                Column('product_name', String(150)),
-                Column('ingredient', String(150)),
-                Column('nutriscore', String(1)),    
-                schema=self.db_infos_db)
-
         table_exist = self.engine.dialect.has_table(self.engine, self.variable_table_category)
         print('-> Table "{}" exists: {}'.format(self.variable_table_category, table_exist))
 
-        category = Table(self.variable_table_category, self.metadata,
-                Column('id', Integer),
-                Column('product_name', String(150)),
-                Column('ingredient', String(150)),
-                Column('nutriscore', String(1)),    
-                schema=self.db_infos_db)
-    
-
         if table_exist == True:
-            product.drop(self.engine)
-            category.drop(self.engine)
-            print('-> Delete existing tables..')
+            Base.metadata.drop_all(self.engine)
+        
 
-        product.create(self.engine)
-        category.create(self.engine)
-        print('-> Tables succesfully created!')
+    def table_initializing(self):
+
+        # 2 - generate database schema
+    
+        Base.metadata.create_all(self.engine)
+    
+        # 3 - create a new session
+        self.session = self.session()
+
+        # 4 - test commit
+
+        # 10 - commit and close session
+        self.session.commit()
+        self.session.close()
+
+
+
+
+        
+
+
+        
+
+      
