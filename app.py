@@ -15,7 +15,7 @@ def main():
     openff.sql_setup.connection_setup()
     openff.sql_setup.table_check()
     openff.sql_setup.table_initializing()
-    #openff.data.get_products_from_france()
+    openff.api_data.get_products_from_france()
     
     
 if __name__ == '__main__':

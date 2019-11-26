@@ -14,6 +14,11 @@ class Parent(Base):
         
     __tablename__ = 'product'
     id = Column(Integer, primary_key=True)
+    product_name = Column(String(20))
+    nutriscore = Column(Integer)
+    ingredients = Column(String(20))
+    stores = Column(String(20))
+    product_url = Column(String(155))
     children = relationship("Parent",
                             secondary=association_table)
 
