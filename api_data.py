@@ -1,14 +1,13 @@
 import requests
-from sql_setup import Sqlconnection
+from sqlalchemy.orm import relationship, sessionmaker
 
 
-class data:
+class Data:
 
     def __init__(self):
 
-        self.sql_setup = Sqlconnection()
-        
-
+        self.products = []
+     
     
     def get_products_from_france(self):
 
@@ -23,11 +22,15 @@ class data:
         
         result = res.json()
        
-        products = result["products"]
+        self.products.append(result["products"])
 
-        for product in products:
-            print(product["product_name"]) 
+        for product in self.products:
+            self.products.append(product("product_name"))
+            print(self.products)
+        
+        
 
+   
         
 
         

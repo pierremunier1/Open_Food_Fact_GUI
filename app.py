@@ -1,12 +1,14 @@
 from sql_setup import Sqlconnection
-from api_data import data
+from api_data import Data
 
 class Openff:
 
     def __init__(self):
         
         self.sql_setup = Sqlconnection()
-        self.api_data = data()
+        self.api_data = Data()
+    
+
   
 
 def main():

@@ -2,8 +2,9 @@ from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, 
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from api_data import Data
 import config
-from base import Base 
+from base import Base
 
 
 class Sqlconnection:
@@ -15,6 +16,10 @@ class Sqlconnection:
         self.db_infos_user = config.USER
         self.db_infos_pwd = config.PWD
         self.db_infos_db = config.DB
+        self.api_data = Data()
+        
+        
+
         
         
     def connection_setup(self):
@@ -48,6 +53,8 @@ class Sqlconnection:
 
     def table_initializing(self):
 
+      
+
         # 2 - generate database schema
     
         Base.metadata.create_all(self.engine)
@@ -55,10 +62,10 @@ class Sqlconnection:
         # 3 - create a new session
         self.session = self.session()
 
-        # 4 - test commit
+        print(self.api_data.products)
 
         # 10 - commit and close session
-        self.session.commit()
+        #self.session.commit()
         self.session.close()
 
 
