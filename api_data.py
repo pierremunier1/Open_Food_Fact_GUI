@@ -4,7 +4,7 @@ from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, 
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.orm import sessionmaker
 from sql_setup import Sqlconnection
-from base import Base , Product
+from base import Base , Product, Category
 
 class Data:
 
@@ -23,7 +23,7 @@ class Data:
         "page" : 1,
         "page_size" : 10,
         "json" : 1,
-        "search_terms" : "Lindt",
+        "search_terms" : "Amora",
         "search_tag" : "brands"
         }
         res = requests.get("https://fr.openfoodfacts.org/cgi/search.pl", params = params)
@@ -35,7 +35,7 @@ class Data:
         for product in self.products:
             product_name = product["product_name"]
             nutriscore = product["nutrition_grade_fr"]
-            categories = product["categories"]
+            category_name = product["categories"]
             quantity = product["quantity"]
             stores = product["stores"]
             code = product["code"]
@@ -43,14 +43,19 @@ class Data:
         
             p1 = Product(id=code,
                         product_name=product_name,
-                        #category_id=5,
-                        category_name=categories,
+                        category_name=category_name,
                         nutriscore=nutriscore, 
                         quantity=quantity, 
                         stores=stores,
                         product_url=url)
+
+            p2 = Category(id=code,
+                        category_name=category_name,
+                        product_name=product_name)
             
             session.add(p1)
+            session.add(p2)
+            
         print("injection des données...ok")
         session.commit()
            
