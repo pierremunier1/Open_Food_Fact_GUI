@@ -1,30 +1,41 @@
-from sqlalchemy import Column, String, Integer, ForeignKey, Table
+from sqlalchemy import Column, String, Integer, BigInteger,ForeignKey, Table
+from sqlalchemy.dialects.mysql import BIGINT as biginteger
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+
 import config
 
 Base = declarative_base()
 
 association_table = Table('association', Base.metadata,
-Column('product_id', Integer, ForeignKey('product.id')),
-Column('category_id', Integer, ForeignKey('category.id'))
-    )
+    Column('product_id', biginteger, ForeignKey('product.id')),
+    Column('category_id', biginteger, ForeignKey('category.id'))
+)
 
-class Parent(Base):
+
+class Product(Base):
         
     __tablename__ = 'product'
-    id = Column(Integer, primary_key=True)
-    product_name = Column(String(20))
-    nutriscore = Column(Integer)
-    ingredients = Column(String(20))
-    stores = Column(String(20))
+    id = Column(biginteger(unsigned=True,zerofill=False),primary_key=True)
+    product_id = Column(biginteger(unsigned=True), ForeignKey('product.id'))
+    category = relationship("Category",
+                             secondary=association_table,
+                             back_populates="product")
+    product_name = Column(String(50))
+    nutriscore = Column(String(1))
+    quantity = Column(String(220))
+    stores = Column(String(155))
     product_url = Column(String(155))
-    children = relationship("Parent",
-                            secondary=association_table)
-
-class Child(Base):
-
+    
+class Category(Base):
+        
     __tablename__ = 'category'
-    id = Column(Integer, primary_key=True)
-    children = relationship("Child",
-                            secondary=association_table)
+    id = Column(biginteger(unsigned=True,zerofill=False),primary_key=True)
+    category_id = Column(biginteger(unsigned=True), ForeignKey('category.id'))
+    category_name = Column(String(155))
+    product = relationship("Product",
+                             secondary=association_table,
+                             back_populates="category")
+    
+    
+

@@ -2,9 +2,9 @@ from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, 
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from api_data import Data
 import config
 from base import Base
+
 
 
 class Sqlconnection:
@@ -16,23 +16,13 @@ class Sqlconnection:
         self.db_infos_user = config.USER
         self.db_infos_pwd = config.PWD
         self.db_infos_db = config.DB
-        self.api_data = Data()
-        
-        
-
-        
-        
-    def connection_setup(self):
-        
-        """connection to database"""
-        
         self.engine = create_engine('mysql+mysqlconnector://{username}:{password}@localhost/{database}'.format(
                 username=self.db_infos_user,
                 password=self.db_infos_pwd,
                 database=self.db_infos_db,
                 ))
 
-        self.session = sessionmaker(bind=self.engine)
+        self.session = sessionmaker(self.engine)
         self.engine.connect()
         self.metadata = MetaData(self.engine)
         print('-> Connected to database: ' + str(self.engine))
@@ -46,27 +36,18 @@ class Sqlconnection:
 
         table_exist = self.engine.dialect.has_table(self.engine, self.variable_table_category)
         print('-> Table "{}" exists: {}'.format(self.variable_table_category, table_exist))
-
-        if table_exist == True:
-            Base.metadata.drop_all(self.engine)
         
 
     def table_initializing(self):
 
-      
-
         # 2 - generate database schema
+
+        Base.metadata.drop_all(self.engine)
     
         Base.metadata.create_all(self.engine)
-    
-        # 3 - create a new session
-        self.session = self.session()
 
-        print(self.api_data.products)
-
-        # 10 - commit and close session
-        #self.session.commit()
-        self.session.close()
+        # 10 - commit and close sessio
+        
 
 
 
