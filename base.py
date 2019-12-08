@@ -25,7 +25,7 @@ class Product(Base):
     quantity = Column(String(220))
     stores = Column(String(155))
     product_url = Column(String(155))
-    category_name = Column(String(155))
+    category_name = Column(String(500))
     
 class Category(Base):
         
@@ -35,7 +35,7 @@ class Category(Base):
                              secondary=association_table,
                              back_populates="product")
     product_name = Column(String(150))
-    category_name = Column(String(155))
+    category_name = Column(String(500))
     
     
 
