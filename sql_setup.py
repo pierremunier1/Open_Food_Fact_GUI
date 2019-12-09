@@ -13,6 +13,7 @@ class Sqlconnection:
         
         self.variable_table_product = config.TABLE_PRODUCT
         self.variable_table_category = config.TABLE_CATEGORY
+        self.variable_table_store = config.TABLE_STORE
         self.db_infos_user = config.USER
         self.db_infos_pwd = config.PWD
         self.db_infos_db = config.DB
@@ -36,6 +37,9 @@ class Sqlconnection:
 
         table_exist = self.engine.dialect.has_table(self.engine, self.variable_table_category)
         print('-> Table "{}" exists: {}'.format(self.variable_table_category, table_exist))
+        
+        table_exist = self.engine.dialect.has_table(self.engine, self.variable_table_store)
+        print('-> Table "{}" exists: {}'.format(self.variable_table_store, table_exist))
         
 
     def table_initializing(self):

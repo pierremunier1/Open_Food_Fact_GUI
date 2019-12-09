@@ -22,11 +22,12 @@ class Product(Base):
                              secondary=association_table,
                              back_populates="category")
     product_store = relationship("Store",
-                        secondary=association_table,
-                         back_populates="store")
+                                secondary=association_table,
+                                back_populates="store")
+    brands = Column(String(150))
     product_name = Column(String(150))
     nutriscore = Column(String(1))
-    quantity = Column(String(220))
+    quantity = Column(String(500))
     store_name = Column(String(155))
     product_url = Column(String(155))
     category_name = Column(String(500))
@@ -50,4 +51,5 @@ class Store(Base):
                              back_populates="product_store")
     product_name = Column(String(150))
     store_name = Column(String(500))
+    category_name = Column(String(500))
 
