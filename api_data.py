@@ -4,7 +4,7 @@ from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, 
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.orm import sessionmaker
 from sql_setup import Sqlconnection
-from base import Base , Product, Category
+from base import Base , Product, Category, Store
 
 class Data:
 
@@ -31,7 +31,7 @@ class Data:
             "tagtype_1" : "countries",
             "tag_contains_1" : "contains",
             "tag_1" : "france",
-            "page" : 1,
+            "page" : 3,
             "page_size" : 10,
             "json" : 1,
 
@@ -47,24 +47,30 @@ class Data:
                 nutriscore = product["nutrition_grade_fr"]
                 category_name = product["categories"]
                 quantity = product["quantity"]
-                stores = product["stores"]
+                store_name = product["stores"]
                 code = product["code"]
                 url = product["url"]
             
                 p1 = Product(id=code,
                             product_name=product_name,
-                            category_name=category_name,
+                            #category_name=category_name,
                             nutriscore=nutriscore, 
                             quantity=quantity, 
-                            stores=stores,
+                            store_name=store_name,
                             product_url=url)
 
                 p2 = Category(id=code,
-                            category_name=category_name,
+                            #category_name=category_name,
                             product_name=product_name)
                 
-                session.add(p1)
-                session.add(p2)
+                p3 = Store(id=code,
+                            #category_name=category_name,
+                            product_name=product_name,
+                            store_name=store_name)
+
+                session.add(p1,p2)
+                session.add(p3)
+                
                 
         print("injection des données...ok")
         session.commit()
