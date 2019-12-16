@@ -9,20 +9,17 @@ from base import Base , Product, Category, Store
 class Data:
 
     def __init__(self):
-
     
         self.sql_setup = Sqlconnection()
-        self.categories = ["pizza","pates","pates à tartiner"]
-        self.page = [1,2,3,4]
+        self.categories = ["pizza","pates","pates à tartiner","sauces"]
+        
+        Session = sessionmaker(bind=self.sql_setup.engine)
+        self.session = Session()
+        self.nutriscore = []
 
     def get_products_from_france(self):
-
-        Session = sessionmaker(bind=self.sql_setup.engine)
-        session = Session()
         
         for categories in self.categories:
-            
-            for page in self.page:
 
                 params = {
 
@@ -34,8 +31,8 @@ class Data:
                 "tagtype_1" : "countries",
                 "tag_contains_1" : "contains",
                 "tag_1" : "france",
-                "page" : page,
-                "page_size" : 10,
+                "page" : 1,
+                "page_size" : 100,
                 "json" : 1,
 
                 }
@@ -44,48 +41,49 @@ class Data:
                 result = res.json()
 
                 self.products = result["products"]
+                
+                product = self.products
+
 
                 for product in self.products:
+
                     product_name = product["product_name"]
                     nutriscore = product["nutrition_grade_fr"]
                     category_name = product["categories"]
-                    quantity = product["quantity"]
                     brands = product["brands"]
-                    store_name = product["stores"]
+                    quantity = product["quantity"]
+                    #stores_names = product["stores"]
                     code = product["code"]
                     url = product["url"]
+
                 
+
+                    c1 = Category(id=code,
+                                category_name=category_name)
+
                     p1 = Product(id=code,
                                 brands=brands,
                                 product_name=product_name,
-                                category_name=category_name,
-                                nutriscore=nutriscore, 
+                                category = c1,
+                                nutriscore_fr=nutriscore, 
                                 quantity=quantity, 
-                                store_name=store_name,
                                 product_url=url)
-
-                    p2 = Category(id=code,
-                                category_name=category_name,
-                                product_name=product_name)
                     
-                    p3 = Store(id=code,
-                                category_name=category_name,
-                                product_name=product_name,
-                                store_name=store_name)
+                    #for store in stores_names.split():
+                        #p3 = Store(id=code,
+                                #store_name=store)
+                        #p1.stores.append(p3)
+                                
 
-                    session.add(p1)
-                    session.add(p2)
-                    session.add(p3)
-                
-                
-        print("injection des données...ok")
-        session.commit()
-           
+                    self.session.add(p1)
+                print("injection des données...ok")
+                self.session.commit()
+
           
 
     
 
-        
+    
 
       
 
