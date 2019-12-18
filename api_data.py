@@ -32,7 +32,7 @@ class Data:
                 "tag_contains_1" : "contains",
                 "tag_1" : "france",
                 "page" : 1,
-                "page_size" : 100,
+                "page_size" : 190,
                 "json" : 1,
 
                 }
@@ -41,22 +41,34 @@ class Data:
                 result = res.json()
 
                 self.products = result["products"]
-                
-                product = self.products
-
-
+                            
                 for product in self.products:
 
-                    product_name = product["product_name"]
-                    nutriscore = product["nutrition_grade_fr"]
-                    category_name = product["categories"]
-                    brands = product["brands"]
-                    quantity = product["quantity"]
-                    #stores_names = product["stores"]
-                    code = product["code"]
-                    url = product["url"]
 
-                
+                    if not all(tag in product for tag in ('nutrition_grade_fr',
+                                                        'quantity',
+                                                        'url',
+                                                        'brands',
+                                                        'categories',
+                                                        'code',
+                                                        'product_name',
+                                                        'stores')):
+                                                        continue
+                    elif len(product['quantity']) == 0:
+                        continue
+                    elif len(product['nutrition_grade_fr']) == 0:
+                        continue
+                                    
+
+                    code = product['code']
+                    product_name = product['product_name']
+                    category_name = product['categories']
+                    brands = product['brands']
+                    nutriscore = product['nutrition_grade_fr']
+                    quantity = product['quantity']
+                    url = product['url']
+                    #store_name = product['stores']
+
 
                     c1 = Category(id=code,
                                 category_name=category_name)
@@ -69,23 +81,22 @@ class Data:
                                 quantity=quantity, 
                                 product_url=url)
                     
-                    #for store in stores_names.split():
+                    #for store in store_name.split():
                         #p3 = Store(id=code,
                                 #store_name=store)
                         #p1.stores.append(p3)
                                 
 
                     self.session.add(p1)
-                print("injection des données...ok")
-                self.session.commit()
+        print("injection des données...ok")
+        self.session.commit()
 
-          
 
-    
 
-    
 
-      
+
+
+
 
 
 
