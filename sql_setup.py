@@ -3,9 +3,7 @@ from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 import config
-from base import Base
-
-
+from base import Base , Product, Category, Store
 
 class Sqlconnection:
 
@@ -52,8 +50,7 @@ class Sqlconnection:
 
         # 10 - commit and close sessio
         
-
-
+    
 
 
         
