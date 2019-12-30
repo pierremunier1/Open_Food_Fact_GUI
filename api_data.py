@@ -1,6 +1,5 @@
 import requests
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, ForeignKey
-
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.orm import sessionmaker
 from sql_setup import Sqlconnection
@@ -20,9 +19,7 @@ class Data:
 
         for category in self.categories:
 
-
             params = {
-
             "action" : "process",
             "tagtype_0" : "categories",
             "tag_contains_0" : "contains",
@@ -31,22 +28,15 @@ class Data:
             "tag_contains_1" : "contains",
             "tag_1" : "france",
             "page" : 1,
-            "page_size" : 20,
+            "page_size" : 18,
             "json" : 1,
-
             }
 
             res = requests.get("https://fr.openfoodfacts.org/cgi/search.pl", params = params)
-            
-            self.result = res.json()
 
+            self.result = res.json()
             self.products = self.result['products']
 
-            #self.get_products_from_france()
-
-
-    def check_product(self):
-                        
             for product in self.products:
                 
                 self.products = [product.update(categories=category) for product in self.result['products']]
@@ -65,7 +55,6 @@ class Data:
                 elif len(product['nutrition_grade_fr']) == 0:
                     continue
             
-    
                 code = product['code']
                 product_name = product['product_name']
                 category_name = product['categories']
@@ -74,7 +63,6 @@ class Data:
                 quantity = product['quantity']
                 url = product['url']
                 store_name = product['stores']
-
 
                 c1 = Category(id=code,
                             category_name=category_name)
@@ -91,7 +79,6 @@ class Data:
                         store_name=store_name)
                 p1.stores.append(p3)
                             
-
                 self.session.add(p1)
             print("injection des données...ok")
             self.session.commit()

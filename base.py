@@ -1,5 +1,4 @@
 from sqlalchemy import Column, String, Integer, BigInteger,ForeignKey, Table
-#from sqlalchemy.dialects.mysql import BIGINT as biginteger
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
