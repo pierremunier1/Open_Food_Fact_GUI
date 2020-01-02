@@ -1,6 +1,7 @@
 from sql_setup import Sqlconnection
 from api_data import Data
-from console import Displayer
+from console import App
+from controller import Controller
 
 class Openff:
 
@@ -8,19 +9,20 @@ class Openff:
         
         self.sql_setup = Sqlconnection()
         self.api_data = Data()
-        self.console = Displayer()
+        self.console = App()
+        self.controller = Controller()
     
 def main():
 
     openff = Openff()
+    
     openff.sql_setup.table_check()
     openff.sql_setup.table_initializing()
     openff.api_data.get_products_from_france()
-    #openff.api_data.product()
+    openff.console.menu()
     
     
-    
-    
+        
     
 if __name__ == '__main__':
     main()
