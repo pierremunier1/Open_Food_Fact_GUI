@@ -39,6 +39,10 @@ class Sqlconnection:
         table_exist = self.engine.dialect.has_table(self.engine, self.variable_table_store)
         print('-> Table "{}" exists: {}'.format(self.variable_table_store, table_exist))
         
+        if table_exist == True:
+            return(True)
+        else:
+            return(False)
 
     def table_initializing(self):
 

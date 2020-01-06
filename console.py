@@ -1,49 +1,73 @@
 from controller import Controller
-import sys #this allows you to use the sys.exit command to quit/logout of the application
-
+from api_data import Data
+import sys 
 
 class App:
 
     def __init__(self):
 
         self.controller = Controller()
+        self.api_data = Data()
+       
 
+    def is_valid_category(self,liste, choice):
+        
+        if self.choice.isdigit() and 0 < int(choice):
+            return True
+        return False
 
-    def menu(self):
-        print("************MAIN MENU**************")
-        #time.sleep(1)
-        print()
+    def input(self, liste, validator):
 
-        choice = input("""
-                        A: Select category
-                        B: Choice a substitute product
-                        C: Search product
-                        D: Save search
-                        Q: Quit/Log Out
-
-                        Please enter your choice: """)
-
-        if choice == "A" or choice =="a":
-            choice = input("""
-                              A: Pizza
-                              B: Sauces
-                              C: Pates à Tartiner
-                              D: Pates
-
-                        Please enter your choice: """)
-
-        if choice == "A" or choice =="a":
-            self.controller.value = 'pizza'
-            self.controller.get_product()
-        elif choice == "B" or choice =="b":
-            self.controller.value = 'Sauces'
-            self.controller.get_product()
-        elif choice=="D" or choice=="d":
-            pass
-        elif choice=="Q" or choice=="q":
-            sys.exit
-        else:
-            print("You must only select either A,B,C, or D.")
-            print("Please try again")
-            pass
+        elements = [f"{i+1}: {element}" for i, element in enumerate(liste)]
+        elements.append("\n>>> ")
+        message = "\n".join(elements)
     
+
+        while True:
+            self.choice = input(message)
+            if validator(liste, self.choice):
+                return liste[int(self.choice)-1]
+            print(
+                "Choix non valide, veuillez choisir une des entrées propoées!"
+            )
+
+    def show_product_detail(self,liste):
+
+        elements = [i[0] 
+                    +" *Nutriscore*: "+
+                    i[1]
+                    +" *Magasin disponible*: "+
+                    i[3]
+                    for i in liste]
+        message = "\n".join(elements)
+        self.choice = input(message)
+        return liste
+
+    def start(self):
+
+        self.choice = self.input(
+            self.api_data.categories,
+            validator=self.is_valid_category,
+        )
+        print(self.choice)
+
+        if self.choice in self.api_data.categories:
+            self.controller.value = self.choice
+            self.controller.get_product()
+
+    def sub_menu(self):
+
+        self.choice = self.input(
+            self.controller.product_list,
+            validator=self.is_valid_category,
+        )
+        #print(self.choice)
+        self.controller.value = self.choice
+        self.controller.get_product_detail()
+
+        self.choice = self.show_product_detail(
+            self.controller.product_detail
+        )
+
+
+   

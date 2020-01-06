@@ -12,11 +12,12 @@ class Data:
         self.sql_setup = Sqlconnection()
         Session = sessionmaker(bind=self.sql_setup.engine)
         self.session = Session()
+        self.categories = ["pizza","pates","pates à tartiner","sauces"]
+
 
     def get_products_from_france(self):
         
-        self.categories = ["pizza","pates","pates à tartiner","sauces"]
-
+        
         for category in self.categories:
 
             params = {
