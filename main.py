@@ -22,8 +22,5 @@ def main():
     openff.console.sub_menu()
    
     
-    
-        
-    
 if __name__ == '__main__':
     main()

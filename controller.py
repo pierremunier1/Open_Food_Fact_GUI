@@ -40,12 +40,13 @@ class Controller:
         self.product_detail = []
 
         products = (self.session.query( Product.product_name,
+                                        Product.brands,
                                         Product.nutriscore_fr,
                                         Product.quantity,
                                         Store.store_name,
                                         )
                                         .filter(getattr(Product, field)== self.value)
-                                        .limit(1))
+                                        .limit(5))
                 
         for product in products:
             self.product_detail.append(product)

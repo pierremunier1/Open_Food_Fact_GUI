@@ -13,12 +13,12 @@ class Data:
         Session = sessionmaker(bind=self.sql_setup.engine)
         self.session = Session()
         self.categories = ["pizza","pates","pates à tartiner","sauces"]
-
+        self.stores = ["Auchan","Lidl","Carrefour","Monoprix"]
 
     def get_products_from_france(self):
         
         
-        for category in self.categories:
+        for store,category in zip(self.stores,self.categories):
 
             params = {
             "action" : "process",
@@ -28,8 +28,11 @@ class Data:
             "tagtype_1" : "countries",
             "tag_contains_1" : "contains",
             "tag_1" : "france",
+            "tagtype_2" : "stores",
+            "tag_contains_2" : "contains",
+            "tag_2": store,
             "page" : 1,
-            "page_size" : 18,
+            "page_size" : 50,
             "json" : 1,
             }
 
@@ -40,7 +43,8 @@ class Data:
 
             for product in self.products:
                 
-                self.products = [product.update(categories=category) for product in self.result['products']]
+                self.products = [product.update(stores=store,
+                                                categories=category) for product in self.result['products']]
 
                 if not all(tag in product for tag in ('nutrition_grade_fr',
                                                     'quantity',
@@ -54,6 +58,8 @@ class Data:
                 elif len(product['quantity']) == 0:
                     continue
                 elif len(product['nutrition_grade_fr']) == 0:
+                    continue
+                elif len(product['stores'])==0:
                     continue
             
                 code = product['code']

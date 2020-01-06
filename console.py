@@ -33,11 +33,17 @@ class App:
 
     def show_product_detail(self,liste):
 
-        elements = [i[0] 
-                    +" *Nutriscore*: "+
+        elements = [
+                    " PRODUIT: "+
+                    i[0]
+                    +" MARQUE: "+
                     i[1]
-                    +" *Magasin disponible*: "+
+                    +" NUTRISCORE: "+
+                    i[2]
+                    +" QUANTITÉ: "+
                     i[3]
+                    +" MAGASIN: "+
+                    i[4]
                     for i in liste]
         message = "\n".join(elements)
         self.choice = input(message)
@@ -61,7 +67,8 @@ class App:
             self.controller.product_list,
             validator=self.is_valid_category,
         )
-        #print(self.choice)
+        print(self.choice)
+        
         self.controller.value = self.choice
         self.controller.get_product_detail()
 
