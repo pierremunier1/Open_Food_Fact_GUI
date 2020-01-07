@@ -23,13 +23,16 @@ class Controller:
 
         field = 'category_name'
         self.product_list = []
-        self.nutriscore_fr = []
+        
 
-        products = (self.session.query(Category.category_name,Product.product_name, Product.nutriscore_fr)
-                    .filter(getattr(Category, field)== self.value)
-                    .order_by(asc(Product.nutriscore_fr))
-                    .join(Product).limit(10))
-        products = [i[1]for i in products]
+        products = (self.session.query(Category.category_name,
+                                        Product.brands,
+                                        Product.product_name, 
+                                        Product.nutriscore_fr)
+                                        .filter(getattr(Category, field)== self.value)
+                                        .order_by(asc(Product.nutriscore_fr))
+                                        .join(Product).limit(10))
+        products = [i[2]for i in products]
                 
         for product in products:
             self.product_list.append(product)
@@ -39,14 +42,42 @@ class Controller:
         field = 'product_name'
         self.product_detail = []
 
-        products = (self.session.query( Product.product_name,
-                                        Product.brands,
-                                        Product.nutriscore_fr,
+        products = (self.session.query(Store.store_name,
+                                        Product.product_name,
                                         Product.quantity,
-                                        Store.store_name,
+                                        Product.nutriscore_fr,
+                                        Product.product_url,
+                                        Product.brands,
                                         )
+                                        .join(Store.products)
                                         .filter(getattr(Product, field)== self.value)
-                                        .limit(5))
+                                        .limit(10))
                 
         for product in products:
             self.product_detail.append(product)
+
+    def get_product_substitute(self):
+
+        field = 'category_name'
+        self.product_nutriscore = []
+
+        products = (self.session.query(Category.category_name,
+                                        Store.store_name,
+                                        Product.product_name,
+                                        Product.quantity,
+                                        Product.nutriscore_fr,
+                                        Product.product_url,
+                                        Product.brands,
+                                        )
+                                        .join(Store.products)
+                                        #.join(Product)
+                                        .filter(getattr(Category, field)== self.value)
+                                        #.order_by(asc(Product.nutriscore_fr))
+                                        #.filter(Product.nutriscore_fr== self.nutriscore)
+                                        .limit(10))
+                                        
+                
+        for product in products:
+            self.product_nutriscore.append(product)
+            print(self.product_nutriscore)
+            

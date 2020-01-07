@@ -20,6 +20,7 @@ def main():
         openff.api_data.get_products_from_france()
     openff.console.start()
     openff.console.sub_menu()
+    #openff.console.check_substitute()
    
     
 if __name__ == '__main__':

@@ -28,10 +28,6 @@ class Product(Base):
     quantity = Column(String(500))
     product_url = Column(String(155))
 
-    def __str__(self):
-
-        return self.product_name
-
 
 class Store(Base):
         

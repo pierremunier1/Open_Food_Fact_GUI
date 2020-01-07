@@ -30,21 +30,35 @@ class App:
             print(
                 "Choix non valide, veuillez choisir une des entrées propoées!"
             )
+    def show_product(self,liste):
+
+        elements = [" PRODUCT: "+
+                    i[2]
+                    +" MARQUE: "+
+                    i[1]
+                    for i in liste]
+        elements = [f"{i+1}:" for i, element in enumerate(liste)]
+        message = "\n".join(elements)
+        self.choice = input(message)
+        return liste
 
     def show_product_detail(self,liste):
 
         elements = [
                     " PRODUIT: "+
-                    i[0]
-                    +" MARQUE: "+
                     i[1]
+                    +" MARQUE: "+
+                    i[5]
                     +" NUTRISCORE: "+
-                    i[2]
+                    i[3].upper()
                     +" QUANTITÉ: "+
-                    i[3]
+                    i[2]
                     +" MAGASIN: "+
+                    i[0]
+                    +" URL: "+
                     i[4]
                     for i in liste]
+
         message = "\n".join(elements)
         self.choice = input(message)
         return liste
@@ -55,7 +69,7 @@ class App:
             self.api_data.categories,
             validator=self.is_valid_category,
         )
-        print(self.choice)
+        
 
         if self.choice in self.api_data.categories:
             self.controller.value = self.choice
@@ -65,16 +79,15 @@ class App:
 
         self.choice = self.input(
             self.controller.product_list,
-            validator=self.is_valid_category,
+            validator=self.is_valid_category
+            
         )
-        print(self.choice)
-        
         self.controller.value = self.choice
         self.controller.get_product_detail()
-
+        
         self.choice = self.show_product_detail(
-            self.controller.product_detail
+            self.controller.product_detail,
         )
-
-
-   
+    
+    def substitute(self):
+        pass

@@ -13,7 +13,7 @@ class Data:
         Session = sessionmaker(bind=self.sql_setup.engine)
         self.session = Session()
         self.categories = ["pizza","pates","pates à tartiner","sauces"]
-        self.stores = ["Auchan","Lidl","Carrefour","Monoprix"]
+        self.stores = ["Casino","Carrefour","Monoprix","Naturalia"]
 
     def get_products_from_france(self):
         
@@ -59,7 +59,7 @@ class Data:
                     continue
                 elif len(product['nutrition_grade_fr']) == 0:
                     continue
-                elif len(product['stores'])==0:
+                elif len(product['stores'])== 0:
                     continue
             
                 code = product['code']
