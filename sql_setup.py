@@ -15,7 +15,9 @@ class Sqlconnection:
         self.db_infos_user = config.USER
         self.db_infos_pwd = config.PWD
         self.db_infos_db = config.DB
-        self.engine = create_engine('mysql+mysqlconnector://{username}:{password}@localhost/{database}'.format(
+        self.engine = create_engine(
+        'mysql+mysqlconnector://{username}:{password}@localhost/{database}'
+        .format(
                 username=self.db_infos_user,
                 password=self.db_infos_pwd,
                 database=self.db_infos_db,
@@ -24,7 +26,7 @@ class Sqlconnection:
         self.session = sessionmaker(self.engine)
         self.engine.connect()
         self.metadata = MetaData(self.engine)
-        print('-> Connected to database: ' + str(self.engine))
+        #print('-> Connected to database: ' + str(self.engine))
 
     def table_check(self):
 

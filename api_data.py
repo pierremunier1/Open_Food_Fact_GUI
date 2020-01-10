@@ -4,6 +4,7 @@ from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.orm import sessionmaker
 from sql_setup import Sqlconnection
 from base import Base , Product, Category, Store
+import config
 
 class Data:
 
@@ -12,13 +13,13 @@ class Data:
         self.sql_setup = Sqlconnection()
         Session = sessionmaker(bind=self.sql_setup.engine)
         self.session = Session()
-        self.categories = ["pizza","pates","pates à tartiner","sauces"]
-        self.stores = ["Casino","Carrefour","Monoprix","Naturalia"]
+        self.categories = config.CATEGORIES
+        self.stores = config.STORES
+
 
     def get_products_from_france(self):
         
-        
-        for store,category in zip(self.stores,self.categories):
+        for category in self.categories:
 
             params = {
             "action" : "process",
@@ -28,40 +29,32 @@ class Data:
             "tagtype_1" : "countries",
             "tag_contains_1" : "contains",
             "tag_1" : "france",
-            "tagtype_2" : "stores",
-            "tag_contains_2" : "contains",
-            "tag_2": store,
             "page" : 1,
-            "page_size" : 50,
+            "page_size" : config.PAGE_SIZE,
             "json" : 1,
             }
 
-            res = requests.get("https://fr.openfoodfacts.org/cgi/search.pl", params = params)
+            res = requests.get("https://fr.openfoodfacts.org/cgi/search.pl",
+                                 params = params)
 
             self.result = res.json()
             self.products = self.result['products']
 
             for product in self.products:
                 
-                self.products = [product.update(stores=store,
-                                                categories=category) for product in self.result['products']]
-
-                if not all(tag in product for tag in ('nutrition_grade_fr',
-                                                    'quantity',
-                                                    'url',
-                                                    'brands',
-                                                    'categories',
-                                                    'code',
-                                                    'product_name',
-                                                    'stores')):
+                self.products = [product.update(
+                                                categories=category) 
+                                for product in self.result['products']]
+                
+                if not all(tag in product for tag in config.FILTER):
                                                     continue
-                elif len(product['quantity']) == 0:
+                elif len(product['quantity'])==0:
                     continue
-                elif len(product['nutrition_grade_fr']) == 0:
+                elif len(product['nutrition_grade_fr'])==0:
                     continue
-                elif len(product['stores'])== 0:
+                elif len(product['stores'])==0:
                     continue
-            
+        
                 code = product['code']
                 product_name = product['product_name']
                 category_name = product['categories']
@@ -70,16 +63,16 @@ class Data:
                 quantity = product['quantity']
                 url = product['url']
                 store_name = product['stores']
-
+            
                 c1 = Category(id=code,
                             category_name=category_name)
                         
                 p1 = Product(id=code,
                             product_name=product_name,
-                            brands = brands,
-                            category = c1,
+                            brands =brands,
+                            category =c1,
                             nutriscore_fr=nutriscore, 
-                            quantity=quantity, 
+                            quantity=quantity,
                             product_url=url)
 
                 p3 = Store(id=code,
@@ -87,8 +80,7 @@ class Data:
                 p1.stores.append(p3)
                             
                 self.session.add(p1)
-            print("injection des données...ok")
-            self.session.commit()
+        self.session.commit()
 
 
         

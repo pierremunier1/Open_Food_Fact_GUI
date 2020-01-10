@@ -15,13 +15,10 @@ class Openff:
 def main():
 
     openff = Openff()
-    if openff.sql_setup.table_check() == False:
-        openff.sql_setup.table_initializing()
-        openff.api_data.get_products_from_france()
-    openff.console.start()
-    openff.console.sub_menu()
-    #openff.console.check_substitute()
+    openff.console.welcome()
    
     
 if __name__ == '__main__':
     main()
+
+    

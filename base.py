@@ -47,6 +47,15 @@ class Category(Base):
                              back_populates='category')
     category_name = Column(String(500))
 
+class History(Base):
+
+    __tablename__ = 'history'
+    id = Column(BigInteger,primary_key=True)
+    brands = Column(String(150))
+    product_name = Column(String(150))
+    nutriscore_fr = Column(String(1))
+    quantity = Column(String(500))
+    product_url = Column(String(155)) 
 
 
 
