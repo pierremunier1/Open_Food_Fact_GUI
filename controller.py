@@ -6,7 +6,8 @@ from sqlalchemy.orm import sessionmaker
 from sql_setup import Sqlconnection
 from base import Base , Product, Category, Store, History
 from api_data import Data
-from prettytable import PrettyTable
+
+
 
 class Controller:
 
@@ -19,6 +20,9 @@ class Controller:
         self.value = None
         self.value_2 = None
         self.base = Product()
+        
+        
+       
 
     def get_product(self):
 
@@ -87,34 +91,66 @@ class Controller:
                                         Product.nutriscore_fr,
                                         Product.product_url,
                                         Product.brands,
-                                        Category.category_name,
                                         Product.id,
+                                        Category.category_name,
                                         )
                                         .filter(getattr(Category, field)== self.value_2)
                                         .filter(getattr(Product, field_2)== nutriscore)
                                         .order_by(asc(Product.nutriscore_fr))
-                                        .join(Product).limit(3))
-        
-        products = [" ID: "+
-                    str(i[7])
-                    +" PRODUIT: "+
-                    i[1]
-                    +" MARQUE: "+
-                    i[5]
-                    +" NUTRISCORE: "+
-                    i[3].upper()
-                    +" QUANTITÉ: "+
-                    i[2]
-                    +" MAGASIN: "+
-                    i[0]
-                    +" URL: "+
-                    i[4]
-                    for i in products]
+                                        .join(Product).limit(1))
 
         for product in products:
             self.product_list.append(product)
-            self.save_history()
-    
+            
     def save_history(self):
 
-            pass
+         
+             
+            
+
+
+        for product in self.product_list:
+            codes = self.session.query(History.id)
+            for code in codes:
+                print(code)
+            if product[6] == code:
+                print(product[6])
+                print("Le produit est déjà enregistré")
+                break
+            else:
+                h1 = History(id=product[6],
+                        product_name=product[7],
+                        brands =product[5],
+                        nutriscore_fr=product[3], 
+                        quantity=product[2],
+                        product_url=product[4],
+                        store_name=product[1],
+                        category_name=product[0])
+
+            print("Le produit a été sauvegardé !")
+            self.session.add(h1)
+            self.session.commit()
+    
+    def show_history(self):
+
+        self.history_result = []
+
+        results = (self.session.query(History.store_name,
+                                        History.product_name,
+                                        History.quantity,
+                                        History.nutriscore_fr,
+                                        History.product_url,
+                                        History.brands,
+                                        History.id,
+                                        History.category_name,
+                                        )
+                                        .order_by(asc(History.nutriscore_fr)))
+                                        
+        
+        for history in results:
+            self.history_result.append(history)
+
+
+            
+   
+        

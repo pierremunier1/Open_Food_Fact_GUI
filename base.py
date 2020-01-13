@@ -56,8 +56,8 @@ class History(Base):
     nutriscore_fr = Column(String(1))
     quantity = Column(String(500))
     product_url = Column(String(155)) 
-
-
+    category_name = Column(String(500))
+    store_name = Column(String(155))
 
     
 

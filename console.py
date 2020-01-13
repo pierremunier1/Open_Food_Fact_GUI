@@ -1,6 +1,10 @@
 from controller import Controller
 from api_data import Data
 from sql_setup import Sqlconnection
+from sqlalchemy.orm import sessionmaker
+from sql_setup import Sqlconnection
+from base import Base , Product, Category, Store, History
+from base import Base
 import config
 import sys 
 
@@ -12,6 +16,9 @@ class App:
         self.api_data = Data()
         self.api_data.categories
         self.sql_setup = Sqlconnection()
+        Session = sessionmaker(bind=self.sql_setup.engine)
+        self.session = Session()
+        self.menu_substitute = None
     
     def is_valid(self,liste, choice):
         
@@ -34,12 +41,14 @@ class App:
                 "Choix non valide, veuillez choisir une des entrées propoées!"
             )
 
-    def input_product_detail(self,liste):
+    def input_product_detail(self,liste,validator):
 
         """give the detail of the selected product"""
 
         elements = [
-                    " PRODUIT: "+
+                    " ID: "
+                    +str(i[6])
+                    +" : "+
                     i[1]
                     +" MARQUE: "+
                     i[5]
@@ -52,10 +61,23 @@ class App:
                     +" URL: "+
                     i[4]
                     for i in liste]
-
-        message = "\n".join(elements)
-        self.choice =input(message)
+        if self.menu_selectable == True:
+            elements = [f"{i+1}: {element}" for i, element in enumerate(elements)]
+            elements.append("\n>>> ")
+            message = "\n".join(elements)
+            while True:
+                self.choice = input(message)
+                if validator(liste, self.choice):
+                    return liste [int(self.choice)-1]
+                print(
+                  "Choix non valide, veuillez choisir une des entrées proposées!"
+                )
+        else:
+            elements.append("\n============================= Appuyer sur Entrer ============================")
+            message = "\n".join(elements)
+        self.choice = input(message)
         return liste
+    
 
     def welcome(self):
 
@@ -91,6 +113,8 @@ class App:
         """show the product list after the category list
            selected"""
 
+        self.menu_selectable = False
+
         if self.choice in self.api_data.categories:
                             self.controller.value = self.choice
                             self.controller.value_2 = self.choice
@@ -111,22 +135,56 @@ class App:
         self.controller.value = self.choice.split()[1]
         self.controller.get_product_detail()
         print("\n DETAIL PRODUIT: \n")
+
         self.choice = self.input_product_detail(
             self.controller.product_detail,
+            validator=self.is_valid,
+
         )
         self.sub_menu_product_substitute()
+        
        
     def sub_menu_product_substitute(self):
 
         """show the substitute product"""
+        self.menu_substitute = True
+        self.menu_selectable = False
         
-        self.controller.get_product_substitute()
+        
         print("\n SELECTION DE PRODUITS AVEC UN NUTRISCORE PLUS FAIBLE: \n")
-        self.choice = self.input(
+        self.controller.get_product_substitute()
+        self.choice = self.input_product_detail(
             self.controller.product_list,
             validator=self.is_valid,
         )
-        self.controller.value = self.choice.split()[1]
-        self.controller.history.append(self.choice)
-        print(self.controller.history)
+
+        self.sub_menu_history()
+
+    def sub_menu_history(self):
+        
+        self.menu_selectable = False
+
+        self.choice = self.input(
+            config.HISTORY,
+            validator=self.is_valid,
+        )
+
+        if self.choice == config.HISTORY[0]:
+            self.controller.save_history()
+            self.sub_menu_history()
+        elif self.choice == config.HISTORY[1]:
+            self.controller.show_history()
+            self.input_product_detail(
+                self.controller.history_result,
+                validator=self.is_valid
+            )
+            self.sub_menu_history()
+        elif self.choice == config.HISTORY[2]:
+            self.menu_categories()
+        elif self.choice == config.HISTORY[3]:
+            quit
+
     
+        
+
+        

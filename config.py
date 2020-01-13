@@ -12,6 +12,10 @@ DB = 'open_ff'
 
 WELCOME = ["Oui",
           "Non"]
+HISTORY = ["Sauvegarder le produit",
+            "Consulter produits sauvegardés",
+           "Revenir à l'écran principal",
+           "Quit"]
 
 STORES = ["Casino",
          "Carrefour",
@@ -20,7 +24,9 @@ STORES = ["Casino",
          "Auchan",
          "Franprix",
          "Magasins U",
-         "Lidl"]    
+         "Lidl"]
+
+STORES2 = ["Naturalia"]
 
 CATEGORIES = ["Confitures de fruits",
               "Pâtes à tartiner aux noisettes",

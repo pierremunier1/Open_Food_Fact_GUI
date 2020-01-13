@@ -42,12 +42,12 @@ class Data:
 
             for product in self.products:
                 
-                self.products = [product.update(
-                                                categories=category) 
+                self.products = [product.update(categories=category)
                                 for product in self.result['products']]
                 
                 if not all(tag in product for tag in config.FILTER):
                                                     continue
+
                 elif len(product['quantity'])==0:
                     continue
                 elif len(product['nutrition_grade_fr'])==0:
