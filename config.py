@@ -12,11 +12,12 @@ DB = 'open_ff'
 
 WELCOME = ["Oui",
           "Non",
-           "Quit"]
+          "Quit",
+          "Consulter les produits sauvegardés"]
 
-HISTORY = ["Sauvegarder les produits",
-            "Consulter produits sauvegardés",
-            "Supprimer les produits sauvegardés",
+HISTORY = ["Sauvegarder produit(s)",
+            "Consulter produit(s)",
+            "Supprimer produit(s)",
            "Revenir à l'écran principal",
            "Quit"]
 

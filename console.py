@@ -1,14 +1,15 @@
 from controller import Controller
 import colorama
-from colorama import Fore,Style
+from colorama import Fore, Style
 from api_data import Data
 from sql_setup import Sqlconnection
 from sqlalchemy.orm import sessionmaker
 from sql_setup import Sqlconnection
-from base import Base , Product, Category, Store, History
+from base import Base, Product, Category, Store, History
 from base import Base
 import config
-import sys 
+import sys
+
 
 class App:
 
@@ -20,12 +21,9 @@ class App:
         self.sql_setup = Sqlconnection()
         Session = sessionmaker(bind=self.sql_setup.engine)
         self.session = Session()
-    
-        
-        
-    
-    def is_valid(self,liste, choice):
-        
+
+    def is_valid(self, liste, choice):
+
         if self.choice.isdigit() and 0 < int(choice) <= len(liste):
             return True
         return False
@@ -40,25 +38,24 @@ class App:
         while True:
             self.choice = input(message)
             if validator(liste, self.choice):
-                return liste[int(self.choice)-1]
-            print(
-                "Choix non valide, veuillez choisir une des entrées propoées!"
-            )
+                return liste[int(self.choice) - 1]
+            print("Choix non valide, veuillez choisir une des entrées propoées!")
 
-    def input_product_detail(self,liste,validator): 
+    def input_product_detail(self, liste, validator):
 
         """give the detail of the selected product"""
-        
+
         if self.menu_get_product == True:
-            elements = [f"ID: {i[6]} : {i[1]} MARQUE : {i[5]} NUTRISCORE : {Fore.YELLOW}{i[3].upper()}{Style.RESET_ALL}"
-                    for i in liste]
-        elif self.menu_get_history == True:
-            elements = [f"ID: {elements}"
-                    for i in liste]
-        else: 
-            elements = [f"ID: {i[6]} : {i[1]} MARQUE : {i[5]} NUTRISCORE : {Fore.YELLOW}{i[3].upper()}{Style.RESET_ALL} MAGASINS : {i[0]} URL : {i[4]}"
-                    for i in liste]
-        
+            elements = [
+                f"ID: {i[6]} : {i[1]} MARQUE : {i[5]} NUTRISCORE : {Fore.YELLOW}{i[3].upper()}{Style.RESET_ALL}"
+                for i in liste
+            ]
+        else:
+            elements = [
+                f"ID: {i[6]} : {i[1]} MARQUE : {i[5]} NUTRISCORE : {Fore.YELLOW}{i[3].upper()}{Style.RESET_ALL} MAGASINS : {i[0]} URL : {i[4]}"
+                for i in liste
+            ]
+
         if self.menu_selectable == True:
             elements = [f"{i+1}: {element}" for i, element in enumerate(elements)]
             elements.append("\n>>> ")
@@ -66,15 +63,16 @@ class App:
             while True:
                 self.choice = input(message)
                 if validator(liste, self.choice):
-                    return liste [int(self.choice)-1]
+                    return liste[int(self.choice) - 1]
                 print("Choix non valide, veuillez choisir une des entrées proposées!")
-                
+
         else:
-            elements.append("\n============================= Appuyer sur Entrer ============================")
+            elements.append(
+                "\n============================= Appuyer sur Entrer ============================"
+            )
             message = "\n".join(elements)
         self.choice = input(message)
         return liste
-    
 
     def welcome(self):
 
@@ -82,10 +80,7 @@ class App:
 
         print("Voulez-vous mettre à jour les données produits?")
 
-        self.choice = self.input(
-            config.WELCOME,
-            validator=self.is_valid,
-            )
+        self.choice = self.input(config.WELCOME, validator=self.is_valid,)
         if self.choice == config.WELCOME[0]:
             self.sql_setup.table_initializing()
             print("Mise à jour des données OpenFoodFact...")
@@ -105,10 +100,7 @@ class App:
 
         """show products category"""
 
-        self.choice = self.input(
-            self.api_data.categories,
-            validator=self.is_valid,
-        )
+        self.choice = self.input(self.api_data.categories, validator=self.is_valid,)
         self.sub_menu_products()
 
     def sub_menu_products(self):
@@ -125,17 +117,14 @@ class App:
             self.controller.get_product()
 
         self.choice = self.input_product_detail(
-            self.controller.product_list,
-            validator=self.is_valid,
-            
+            self.controller.product_list, validator=self.is_valid,
         )
-        self.sub_menu_product_detail()      
-
+        self.sub_menu_product_detail()
 
     def sub_menu_product_detail(self):
 
         """show the product detail"""
-        
+
         self.menu_selectable = False
 
         self.controller.value = self.choice[6]
@@ -143,48 +132,50 @@ class App:
         print("\n DETAIL PRODUIT: \n")
 
         self.choice = self.input_product_detail(
-            self.controller.product_detail,
-            validator=self.is_valid,
-
+            self.controller.product_detail, validator=self.is_valid,
         )
         self.sub_menu_product_substitute()
-        
-       
+
     def sub_menu_product_substitute(self):
 
         """show the substitute product"""
+
         self.menu_substitute = True
         self.menu_selectable = False
+        self.controller.nutriscore = None
         
-        
-        print("\n SELECTION DE PRODUITS AVEC UN NUTRISCORE PLUS FAIBLE: \n")
-        self.controller.get_product_substitute()
-        self.choice = self.input_product_detail(
-            self.controller.product_list,
-            validator=self.is_valid,
-        )
+        if self.controller.product_detail[0][3] == "a":
+            print(Fore.LIGHTGREEN_EX + "\n Produit disposant d'un très bon nutriscore ! \n" + Style.RESET_ALL)
+        elif self.controller.product_detail[0][3] == "b" or "c" or "d":
+            self.controller.nutriscore = ["a","b"]
+      
+            print("test")
+        else:
+            self.controller.get_product_substitute()
+            self.choice = self.input_product_detail(
+                self.controller.product_list, validator=self.is_valid,
+            )
+            print("\n SELECTION DE PRODUITS AVEC UN NUTRISCORE PLUS FAIBLE: \n")
 
         self.sub_menu_history()
 
     def sub_menu_history(self):
-        
+
         self.menu_selectable = False
         self.menu_get_history = True
 
-        self.choice = self.input(
-            config.HISTORY,
-            validator=self.is_valid,
-        )
+        self.choice = self.input(config.HISTORY, validator=self.is_valid,)
 
         if self.choice == config.HISTORY[0]:
             self.controller.save_history()
-            print(Fore.GREEN + "\n Les produits ont été sauvegardés !\n" + Style.RESET_ALL)
+            print(
+                Fore.GREEN + "\n Les produits ont été sauvegardés !\n" + Style.RESET_ALL
+            )
             self.sub_menu_history()
         elif self.choice == config.HISTORY[1]:
             self.controller.show_history()
             self.input_product_detail(
-                self.controller.history_result,
-                validator=self.is_valid,
+                self.controller.history_result, validator=self.is_valid,
             )
             self.sub_menu_history()
         elif self.choice == config.HISTORY[3]:
@@ -195,8 +186,3 @@ class App:
             self.sub_menu_history()
         elif self.choice == config.HISTORY[3]:
             quit
-
-    
-        
-
-        
