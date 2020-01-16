@@ -20,8 +20,9 @@ class App:
         self.sql_setup = Sqlconnection()
         Session = sessionmaker(bind=self.sql_setup.engine)
         self.session = Session()
-        self.fore = Fore
-        self.menu_substitute = None
+    
+        
+        
     
     def is_valid(self,liste, choice):
         
@@ -95,6 +96,10 @@ class App:
             self.controller.show_history()
         elif self.choice == config.WELCOME[1]:
             self.menu_categories()
+        elif self.choice == config.WELCOME[3]:
+            self.controller.delete_history()
+        elif self.choice == config.WELCOME[4]:
+            quit
 
     def menu_categories(self):
 
@@ -173,16 +178,21 @@ class App:
 
         if self.choice == config.HISTORY[0]:
             self.controller.save_history()
+            print(Fore.GREEN + "\n Les produits ont été sauvegardés !\n" + Style.RESET_ALL)
             self.sub_menu_history()
         elif self.choice == config.HISTORY[1]:
             self.controller.show_history()
-            self.input(
+            self.input_product_detail(
                 self.controller.history_result,
                 validator=self.is_valid,
             )
             self.sub_menu_history()
-        elif self.choice == config.HISTORY[2]:
+        elif self.choice == config.HISTORY[3]:
             self.menu_categories()
+        elif self.choice == config.HISTORY[2]:
+            self.controller.delete_history()
+            print(Fore.RED + "\n Les produits ont été supprimés !\n" + Style.RESET_ALL)
+            self.sub_menu_history()
         elif self.choice == config.HISTORY[3]:
             quit
 

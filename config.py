@@ -12,10 +12,11 @@ DB = 'open_ff'
 
 WELCOME = ["Oui",
           "Non",
-          "Consulter les produits sauvegardés"]
+           "Quit"]
 
-HISTORY = ["Sauvegarder le produit",
+HISTORY = ["Sauvegarder les produits",
             "Consulter produits sauvegardés",
+            "Supprimer les produits sauvegardés",
            "Revenir à l'écran principal",
            "Quit"]
 
@@ -26,7 +27,10 @@ STORES = ["Casino",
          "Auchan",
          "Franprix",
          "Magasins U",
-         "Lidl"]
+         "Lidl",
+         "Cora",
+         "Leclerc",
+         "Biocoop"]
 
 STORES2 = ["Naturalia"]
 

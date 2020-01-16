@@ -98,26 +98,36 @@ class Controller:
             
     def save_history(self):
 
+
         for product in self.product_list:
-    
             h1 = History(id=product[6])
-        
-            print("Le produit a été sauvegardé !")
             self.session.add(h1)
+            for product in self.product_detail:
+                h2 = History(id=product[6])
+                self.session.add(h2)
+            
         self.session.commit()
     
     def show_history(self):
 
         self.history_result = []
 
-        products = self.session.query(History.id,
+        products = (self.session.query(Store.store_name,
                                       Product.product_name,
+                                      Product.quantity,
+                                      Product.nutriscore_fr,
+                                      Product.product_url,
                                       Product.brands,
-                                      Product.nutriscore_fr
-                                      ).join(Product,Product.id == History.id).all()
+                                      History.id,
+                                      ).join(Product,Product.id == History.id).join(Store,Store.id == History.id))
                                     
         for history in products:
-            print(history)
+            self.history_result.append(history)
+    
+    def delete_history(self):
+
+       self.session.query(History).delete()
+       self.session.commit()
                 
 
 

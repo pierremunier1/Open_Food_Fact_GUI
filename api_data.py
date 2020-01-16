@@ -43,6 +43,7 @@ class Data:
             for product in self.products:
                 
                 self.products = [product.update(categories=category)
+                                                
                                 for product in self.result['products']]
                 
                 if not all(tag in product for tag in config.FILTER):
