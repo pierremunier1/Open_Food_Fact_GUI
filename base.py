@@ -18,10 +18,13 @@ class Product(Base):
     id = Column(BigInteger,primary_key=True)
     category = relationship("Category",
                              back_populates="products")
+    history = relationship("History",
+                             back_populates="products")
     stores = relationship("Store",
                                 secondary=association_table,
                                 back_populates="products")
     category_id = Column(BigInteger, ForeignKey('category.id'))
+    history_id = Column(BigInteger, ForeignKey('history.id'))
     brands = Column(String(150))
     product_name = Column(String(150))
     nutriscore_fr = Column(String(1))
@@ -50,14 +53,11 @@ class Category(Base):
 class History(Base):
 
     __tablename__ = 'history'
-    id = Column(BigInteger,primary_key=True)
-    brands = Column(String(150))
-    product_name = Column(String(150))
-    nutriscore_fr = Column(String(1))
-    quantity = Column(String(500))
-    product_url = Column(String(155)) 
-    category_name = Column(String(500))
-    store_name = Column(String(155))
+    id = Column(BigInteger,primary_key=True,
+                             )
+    products = relationship("Product",
+                            back_populates='history')
+   
 
     
 

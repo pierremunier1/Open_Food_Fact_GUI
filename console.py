@@ -1,4 +1,6 @@
 from controller import Controller
+import colorama
+from colorama import Fore,Style
 from api_data import Data
 from sql_setup import Sqlconnection
 from sqlalchemy.orm import sessionmaker
@@ -18,6 +20,7 @@ class App:
         self.sql_setup = Sqlconnection()
         Session = sessionmaker(bind=self.sql_setup.engine)
         self.session = Session()
+        self.fore = Fore
         self.menu_substitute = None
     
     def is_valid(self,liste, choice):
@@ -41,26 +44,20 @@ class App:
                 "Choix non valide, veuillez choisir une des entrées propoées!"
             )
 
-    def input_product_detail(self,liste,validator):
+    def input_product_detail(self,liste,validator): 
 
         """give the detail of the selected product"""
-
-        elements = [
-                    " ID: "
-                    +str(i[6])
-                    +" : "+
-                    i[1]
-                    +" MARQUE: "+
-                    i[5]
-                    +" NUTRISCORE: "+
-                    i[3].upper()
-                    +" QUANTITÉ: "+
-                    i[2]
-                    +" MAGASIN: "+
-                    i[0]
-                    +" URL: "+
-                    i[4]
+        
+        if self.menu_get_product == True:
+            elements = [f"ID: {i[6]} : {i[1]} MARQUE : {i[5]} NUTRISCORE : {Fore.YELLOW}{i[3].upper()}{Style.RESET_ALL}"
                     for i in liste]
+        elif self.menu_get_history == True:
+            elements = [f"ID: {elements}"
+                    for i in liste]
+        else: 
+            elements = [f"ID: {i[6]} : {i[1]} MARQUE : {i[5]} NUTRISCORE : {Fore.YELLOW}{i[3].upper()}{Style.RESET_ALL} MAGASINS : {i[0]} URL : {i[4]}"
+                    for i in liste]
+        
         if self.menu_selectable == True:
             elements = [f"{i+1}: {element}" for i, element in enumerate(elements)]
             elements.append("\n>>> ")
@@ -69,9 +66,8 @@ class App:
                 self.choice = input(message)
                 if validator(liste, self.choice):
                     return liste [int(self.choice)-1]
-                print(
-                  "Choix non valide, veuillez choisir une des entrées proposées!"
-                )
+                print("Choix non valide, veuillez choisir une des entrées proposées!")
+                
         else:
             elements.append("\n============================= Appuyer sur Entrer ============================")
             message = "\n".join(elements)
@@ -89,13 +85,15 @@ class App:
             config.WELCOME,
             validator=self.is_valid,
             )
-        if self.choice == "Oui":
+        if self.choice == config.WELCOME[0]:
             self.sql_setup.table_initializing()
             print("Mise à jour des données OpenFoodFact...")
             self.api_data.get_products_from_france()
             print("injection des données OK")
             self.menu_categories()
-        else:
+        elif self.choice == config.WELCOME[2]:
+            self.controller.show_history()
+        elif self.choice == config.WELCOME[1]:
             self.menu_categories()
 
     def menu_categories(self):
@@ -113,14 +111,15 @@ class App:
         """show the product list after the category list
            selected"""
 
-        self.menu_selectable = False
+        self.menu_get_product = True
+        self.menu_selectable = True
 
         if self.choice in self.api_data.categories:
-                            self.controller.value = self.choice
-                            self.controller.value_2 = self.choice
-                            self.controller.get_product()
+            self.controller.value = self.choice
+            self.controller.value_2 = self.choice
+            self.controller.get_product()
 
-        self.choice = self.input(
+        self.choice = self.input_product_detail(
             self.controller.product_list,
             validator=self.is_valid,
             
@@ -131,8 +130,10 @@ class App:
     def sub_menu_product_detail(self):
 
         """show the product detail"""
+        
+        self.menu_selectable = False
 
-        self.controller.value = self.choice.split()[1]
+        self.controller.value = self.choice[6]
         self.controller.get_product_detail()
         print("\n DETAIL PRODUIT: \n")
 
@@ -163,6 +164,7 @@ class App:
     def sub_menu_history(self):
         
         self.menu_selectable = False
+        self.menu_get_history = True
 
         self.choice = self.input(
             config.HISTORY,
@@ -174,9 +176,9 @@ class App:
             self.sub_menu_history()
         elif self.choice == config.HISTORY[1]:
             self.controller.show_history()
-            self.input_product_detail(
+            self.input(
                 self.controller.history_result,
-                validator=self.is_valid
+                validator=self.is_valid,
             )
             self.sub_menu_history()
         elif self.choice == config.HISTORY[2]:

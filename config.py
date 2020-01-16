@@ -11,7 +11,9 @@ TABLE_STORE = 'store'
 DB = 'open_ff'
 
 WELCOME = ["Oui",
-          "Non"]
+          "Non",
+          "Consulter les produits sauvegardés"]
+
 HISTORY = ["Sauvegarder le produit",
             "Consulter produits sauvegardés",
            "Revenir à l'écran principal",
