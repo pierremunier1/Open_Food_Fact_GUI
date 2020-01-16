@@ -119,7 +119,16 @@ class Controller:
                                       Product.product_url,
                                       Product.brands,
                                       History.id,
-                                      ).join(Product,Product.id == History.id).join(Store,Store.id == History.id))
+                                      Category.category_name
+                                      ).join(Product,Product.id == History.id)
+                                       .join(Store,Store.id == History.id)
+                                       .join(Category,Category.id == History.id)
+                                      .order_by(asc(Category.category_name))
+                                      .order_by(asc(Product.nutriscore_fr)))
+                                                    
+                                      
+                                      
+
                                     
         for history in products:
             self.history_result.append(history)
