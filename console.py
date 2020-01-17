@@ -39,7 +39,7 @@ class App:
             self.choice = input(message)
             if validator(liste, self.choice):
                 return liste[int(self.choice) - 1]
-            print("Choix non valide, veuillez choisir une des entrées propoées!")
+            print(Fore.LIGHTRED_EX + "\n Choix non valide, veuillez choisir une des entrées propoées! \n" + Style.RESET_ALL)
 
     def input_product_detail(self, liste, validator):
 
@@ -64,11 +64,10 @@ class App:
                 self.choice = input(message)
                 if validator(liste, self.choice):
                     return liste[int(self.choice) - 1]
-                print("Choix non valide, veuillez choisir une des entrées proposées!")
-
+                print(Fore.LIGHTRED_EX + "\n Choix non valide, veuillez choisir une des entrées proposées! \n" + Style.RESET_ALL)
         else:
             elements.append(
-                "\n============================= Appuyer sur Entrer ============================"
+                "\n============================= Appuyer sur Entrer ============================\n"
             )
             message = "\n".join(elements)
         self.choice = input(message)
@@ -78,7 +77,7 @@ class App:
 
         """update datas at the launch if necessary"""
 
-        print("Voulez-vous mettre à jour les données produits?")
+        print("\n Voulez-vous mettre à jour les données produits?\n")
 
         self.choice = self.input(config.WELCOME, validator=self.is_valid,)
         if self.choice == config.WELCOME[0]:
@@ -142,21 +141,17 @@ class App:
 
         self.menu_substitute = True
         self.menu_selectable = False
-        self.controller.nutriscore = None
         
         if self.controller.product_detail[0][3] == "a":
             print(Fore.LIGHTGREEN_EX + "\n Produit disposant d'un très bon nutriscore ! \n" + Style.RESET_ALL)
-        elif self.controller.product_detail[0][3] == "b" or "c" or "d":
-            self.controller.nutriscore = ["a","b"]
-      
-            print("test")
+        
         else:
+            print("\n PRODUIT AVEC UN NUTRISCORE PLUS FAIBLE: \n")
             self.controller.get_product_substitute()
             self.choice = self.input_product_detail(
                 self.controller.product_list, validator=self.is_valid,
             )
-            print("\n SELECTION DE PRODUITS AVEC UN NUTRISCORE PLUS FAIBLE: \n")
-
+       
         self.sub_menu_history()
 
     def sub_menu_history(self):
@@ -164,13 +159,10 @@ class App:
         self.menu_selectable = False
         self.menu_get_history = True
 
-        self.choice = self.input(config.HISTORY, validator=self.is_valid,)
+        self.choice = self.input(config.HISTORY,validator=self.is_valid,)
 
         if self.choice == config.HISTORY[0]:
             self.controller.save_history()
-            print(
-                Fore.GREEN + "\n Les produits ont été sauvegardés !\n" + Style.RESET_ALL
-            )
             self.sub_menu_history()
         elif self.choice == config.HISTORY[1]:
             self.controller.show_history()
@@ -182,7 +174,7 @@ class App:
             self.menu_categories()
         elif self.choice == config.HISTORY[2]:
             self.controller.delete_history()
-            print(Fore.RED + "\n Les produits ont été supprimés !\n" + Style.RESET_ALL)
+            print(Fore.LIGHTBLUE_EX + "\n Les produits ont été supprimés !\n" + Style.RESET_ALL)
             self.sub_menu_history()
         elif self.choice == config.HISTORY[3]:
             quit
