@@ -1,7 +1,5 @@
 from pathlib import Path
 
-
-
 HOST = 'localhost'
 USER = 'openff'
 PWD = 'openff'

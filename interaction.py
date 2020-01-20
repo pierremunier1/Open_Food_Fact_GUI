@@ -2,9 +2,10 @@ from sqlalchemy import exc
 from colorama import Fore, Style
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import asc
-from sql_setup import Sqlconnection
+
 from base import Product, Category, Store, History
 from api_data import Data
+from sql_setup import Sqlconnection
 
 
 class Interaction:
@@ -18,7 +19,6 @@ class Interaction:
         self.value_2 = None
 
     def insert_product(self, product):
-
         """check if produit exist in table history"""
 
         try:
@@ -41,7 +41,6 @@ class Interaction:
             )
 
     def get_product(self):
-
         """show selectable product list"""
 
         field = "category_name"
@@ -67,7 +66,6 @@ class Interaction:
             self.product_list.append(product)
 
     def get_product_detail(self):
-
         """show the product detail"""
 
         field = "id"
@@ -92,13 +90,12 @@ class Interaction:
             self.product_detail.append(product)
 
     def get_product_substitute(self):
-
         """find the product substitute"""
 
         field = "category_name"
         field_2 = "nutriscore_fr"
         self.product_list = []
-        nutriscore = "a"
+        nutriscore = self.product_detail[0][3]
 
         products = (
             self.session.query(
@@ -112,7 +109,7 @@ class Interaction:
                 Category.category_name,
             )
             .filter(getattr(Category, field) == self.value_2)
-            .filter(getattr(Product, field_2) == nutriscore)
+            .filter(getattr(Product, field_2) < nutriscore)
             .order_by(asc(Product.nutriscore_fr))
             .join(Product)
             .limit(1)
@@ -122,7 +119,6 @@ class Interaction:
             self.product_list.append(product)
 
     def save_history(self):
-
         """save the substitute product and the original
             in the history table"""
 
@@ -132,7 +128,6 @@ class Interaction:
                 self.insert_product(product[6])
 
     def show_history(self):
-
         """show the saved product into the history table"""
 
         self.history_result = []
@@ -159,7 +154,6 @@ class Interaction:
             self.history_result.append(history)
 
     def delete_history(self):
-
         """delete products in history table"""
 
         self.session.query(History).delete()

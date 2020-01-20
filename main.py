@@ -18,6 +18,5 @@ def main():
     openff = Openff()
     openff.console.welcome()
 
-
 if __name__ == "__main__":
     main()

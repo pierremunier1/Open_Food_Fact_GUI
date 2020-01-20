@@ -43,7 +43,8 @@ class App:
 
         if self.menu_get_product is True:
             elements = [
-                f"ID: {i[6]} : {i[1]} MARQUE : {i[5]} NUTRISCORE :{Fore.YELLOW}{i[3].upper()}{Style.RESET_ALL}"
+                f"ID: {i[6]} : {i[1]} MARQUE : {i[5]} NUTRISCORE : "
+                f"{Fore.YELLOW}{i[3].upper()}{Style.RESET_ALL}"
                 for i in liste
             ]
         if self.menu_selectable is True:
