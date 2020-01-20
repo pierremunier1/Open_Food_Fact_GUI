@@ -1,6 +1,7 @@
 from pathlib import Path
 
 
+
 HOST = 'localhost'
 USER = 'openff'
 PWD = 'openff'
@@ -10,30 +11,17 @@ TABLE_CATEGORY = 'category'
 TABLE_STORE = 'store'
 DB = 'open_ff'
 
+
 WELCOME = ["Oui",
           "Non",
-          "Quit",
-          "Consulter les produits sauvegardés"]
+          "Consulter les produits sauvegardés",
+          "Quit"]
 
 HISTORY = ["Sauvegarder produit(s)",
             "Consulter produit(s)",
             "Supprimer produit(s)",
            "Revenir à l'écran principal",
-           "Quit"]
-
-STORES = ["Casino",
-         "Carrefour",
-         "Monoprix",
-         "Naturalia",
-         "Auchan",
-         "Franprix",
-         "Magasins U",
-         "Lidl",
-         "Cora",
-         "Leclerc",
-         "Biocoop"]
-
-STORES2 = ["Naturalia"]
+           "Quit"]        
 
 CATEGORIES = ["Confitures de fruits",
               "Pâtes à tartiner aux noisettes",
