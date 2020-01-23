@@ -10,24 +10,24 @@ TABLE_STORE = 'store'
 DB = 'open_ff'
 
 
-WELCOME = ["Oui",
-          "Non",
+WELCOME = ["Mettre à jour les produits",
+           "Rechercher un produit",
           "Consulter les produits sauvegardés",
           "Quit"]
 
 HISTORY = ["Sauvegarder produit(s)",
             "Consulter produit(s)",
             "Supprimer produit(s)",
-           "Revenir à l'écran principal",
+           "Rechercher un produit",
            "Quit"]        
 
-CATEGORIES = ["Confitures de fruits",
+CATEGORIES = ["Confitures de fruits rouges",
               "Pâtes à tartiner aux noisettes",
               "Brioches",
               "Jus de fruits"
               ]
 
-PAGE_SIZE = 1000
+PAGE_SIZE = 200
 
 
 FILTER = ('nutrition_grade_fr',

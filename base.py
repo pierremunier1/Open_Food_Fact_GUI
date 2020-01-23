@@ -53,3 +53,4 @@ class History(Base):
     __tablename__ = "history"
     id = Column(BigInteger, primary_key=True,)
     products = relationship("Product", back_populates="history")
+

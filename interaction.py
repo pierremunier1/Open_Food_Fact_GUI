@@ -17,6 +17,7 @@ class Interaction:
         self.session = Session()
         self.value = None
         self.value_2 = None
+        
 
     def insert_product(self, product):
         """check if produit exist in table history"""
@@ -29,14 +30,14 @@ class Interaction:
             self.session.rollback()
             print(
                 Fore.LIGHTRED_EX +
-                "\n Produit(s) déjà présent(s) \n"
+                f"\n Produit(s) ID : {product} déjà présent(s) \n"
                 + Style.RESET_ALL
             )
         else:
             self.session.commit()
             print(
                 Fore.LIGHTGREEN_EX +
-                "\n Produit(s) sauvegardé(s) \n"
+                f"\n Produit(s) ID : {product} sauvegardé(s) \n"
                 + Style.RESET_ALL
             )
 
@@ -59,7 +60,7 @@ class Interaction:
             .filter(getattr(Category, field) == self.value)
             .order_by(asc(Product.nutriscore_fr))
             .join(Product)
-            .limit(20)
+            .limit(10)
         )
 
         for product in products:
@@ -122,11 +123,13 @@ class Interaction:
         """save the substitute product and the original
             in the history table"""
 
-        for product in self.product_detail:
-            self.insert_product(product[6])
-            for product in self.product_list:
-                self.insert_product(product[6])
+        for product in zip(self.product_detail,self.product_list):
+            
+            self.insert_product(product[0][6])
+        
+            self.insert_product(product[1][6])
 
+    
     def show_history(self):
         """show the saved product into the history table"""
 

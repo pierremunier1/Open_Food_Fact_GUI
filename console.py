@@ -12,6 +12,9 @@ class App:
         self.api_data = Data()
         self.api_data.categories
         self.sql_setup = Sqlconnection()
+        self.menu_selectable = False
+        self.menu_get_product = False
+       
 
     def is_valid(self, liste, choice):
         """check if the choice is valide"""
@@ -47,6 +50,15 @@ class App:
                 f"{Fore.YELLOW}{i[3].upper()}{Style.RESET_ALL}"
                 for i in liste
             ]
+        else:
+            elements = [
+                f" {i[1]} MARQUE : {i[5]} NUTRISCORE : "
+                f"{Fore.YELLOW}{i[3].upper()}{Style.RESET_ALL} "
+                f"MAGASINS : {i[0]} "
+                f"URL : {Fore.GREEN}{i[4]}{Style.RESET_ALL}"
+                for i in liste
+            ]
+        
         if self.menu_selectable is True:
             elements = [f"{i+1}: {element}"
                         for i, element in enumerate(elements)]
@@ -73,7 +85,7 @@ class App:
 
         """update datas at the launch if necessary"""
 
-        print("\n Mettre à jour produits ?\n")
+        print("\n Que voulez vous faire ?\n")
 
         self.choice = self.input(
             config.WELCOME,
@@ -84,11 +96,17 @@ class App:
             self.sql_setup.table_initializing()
             print("Mise à jour des données OpenFoodFact...")
             self.api_data.get_products_from_france()
-            print("injection des données OK")
+            print("\n injection des données OK \n")
             self.menu_categories()
 
         elif self.choice == config.WELCOME[2]:
+
             self.interaction.show_history()
+            self.input_product_detail(
+                self.interaction.history_result,
+                validator=self.is_valid,
+            )
+            self.welcome()
         elif self.choice == config.WELCOME[1]:
             self.menu_categories()
         elif self.choice == config.WELCOME[3]:
@@ -150,7 +168,7 @@ class App:
         if self.interaction.product_detail[0][3] == "a":
             print(
                 Fore.LIGHTGREEN_EX
-                + "\n Produit disposant d'un très bon nutriscore ! \n"
+                + "\n Produit disposant d'un bon nutriscore ! \n"
                 + Style.RESET_ALL
             )
         else:
@@ -166,7 +184,7 @@ class App:
     def sub_menu_history(self):
 
         self.menu_selectable = False
-        self.menu_get_history = True
+        self.menu_get_product = False
 
         self.choice = self.input(
             config.HISTORY,
