@@ -25,7 +25,7 @@ chargées il ne sera plus nécessaire de selectionner cette option.
 
 Le programme proposera les catégories suivantes : 
 
-   1: Confitures de fruits rouges
+    1: Confitures de fruits rouges
     2: Pâtes à tartiner aux noisettes
     3: Brioches
     4: Jus de fruits
@@ -46,11 +46,11 @@ Le programme retournera le détail du produit, ensuite l'utilisateur devra appuy
 
 L'utilisateur suivant son choix, pourra alors choisir de sauvegarder ses produits en base de données si il le souhaite ou bien supprimer des produits précédement enregistrer.
 
-# Pré-requis
+## Pré-requis
 
 Il est nécessaire dans un premier temps de créer une base de donnée "open_ff" et de remplir les informations de connexion à cette dernière dans le fichier CONFIG.PY dans la section DATABASE configuration.
 
-# Lancement
+## Lancement
 
 python3 main.py
 
