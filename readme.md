@@ -6,7 +6,7 @@ Basé sur l'API Openfoodfact
 
 ## Description du parcours utilisateur
 
-### L'utilisateur ouvre le programme, les choix suivants sont proposés: 
+#### L'utilisateur ouvre le programme, les choix suivants sont proposés: 
 
     Que voulez vous faire ?
 
@@ -16,19 +16,19 @@ Basé sur l'API Openfoodfact
     4: Quit
 
 
-### L'utilisateur selectionne le choix 1: 
+#### L'utilisateur selectionne le choix 1: 
 
 La base de données sera mise à jour avec les données OFF, cependant une fois les données
 chargées il ne sera plus nécessaire de selectionner cette option.
 
-### L'utilisateur sélectionne 2. 
+#### L'utilisateur sélectionne 2. 
 
 Le programme proposera les catégories suivantes : 
 
-   1.Confitures fruits rouges
-   2.Pâtes à tartiner
-   3.Brioches
-   4.Jus de fruits
+   1: Confitures de fruits rouges
+    2: Pâtes à tartiner aux noisettes
+    3: Brioches
+    4: Jus de fruits
 
 Bien entendu, il est possible pour l'utilisateur de modifier les catégories produit dans le fichier CONFIG.PY section API prévue à cet éffet, il faudra ensuite procéder à une mise à jour de la base de données.
 
@@ -36,7 +36,7 @@ L'utilisateur selectionne une catégorie, le programme va afficher une liste de 
 
 Le programme retournera le détail du produit, ensuite l'utilisateur devra appuyer sur "entrer" afin d'afficher un substitut si un produit plus sain est disponible.
 
-### L'utilisateur proprosera ensuite le menu suivant :
+#### Le programme proprosera ensuite le menu suivant :
 
     1: Sauvegarder produit(s)
     2: Consulter produit(s)
