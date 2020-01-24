@@ -1,4 +1,4 @@
-# OC-Pr5-OpenFoodFacts
+# Projet_5_Openfoodfact
 
 Programme permettant à un utilisateur de fournir un aliment de substitution plus sain que celui sélectionné.
 
