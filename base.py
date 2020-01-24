@@ -13,7 +13,7 @@ association_table = Table(
 
 
 class Product(Base):
-
+    """product table."""
     __tablename__ = "product"
     id = Column(BigInteger, primary_key=True)
     category = relationship("Category", back_populates="products")
@@ -26,12 +26,12 @@ class Product(Base):
     brands = Column(String(150))
     product_name = Column(String(150))
     nutriscore_fr = Column(String(1))
-    quantity = Column(String(500))
+    quantity = Column(String(5))
     product_url = Column(String(155))
 
 
 class Store(Base):
-
+    """store table."""
     __tablename__ = "store"
     id = Column(BigInteger, primary_key=True)
     products = relationship(
@@ -41,16 +41,15 @@ class Store(Base):
 
 
 class Category(Base):
-
+    """category table."""
     __tablename__ = "category"
     id = Column(BigInteger, primary_key=True)
     products = relationship("Product", back_populates="category")
-    category_name = Column(String(500))
+    category_name = Column(String(155))
 
 
 class History(Base):
-
+    """history table."""
     __tablename__ = "history"
     id = Column(BigInteger, primary_key=True,)
     products = relationship("Product", back_populates="history")
-

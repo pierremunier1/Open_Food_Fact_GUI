@@ -5,8 +5,10 @@ from interaction import Interaction
 
 
 class Openff:
-    def __init__(self):
+    """class launch application in the terminal."""
 
+    def __init__(self):
+        """initializing variables."""
         self.sql_setup = Sqlconnection()
         self.api_data = Data()
         self.console = App()
@@ -14,9 +16,10 @@ class Openff:
 
 
 def main():
-
+    """function launch the application."""
     openff = Openff()
     openff.console.welcome()
+
 
 if __name__ == "__main__":
     main()

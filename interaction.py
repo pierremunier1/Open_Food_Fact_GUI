@@ -9,19 +9,18 @@ from sql_setup import Sqlconnection
 
 
 class Interaction:
+    """class contain all requests to the tables."""
     def __init__(self):
-
+        """initializing all variable for interaction class."""
         self.api_data = Data()
         self.sql_setup = Sqlconnection()
         Session = sessionmaker(bind=self.sql_setup.engine)
         self.session = Session()
         self.value = None
         self.value_2 = None
-        
 
     def insert_product(self, product):
-        """check if produit exist in table history"""
-
+        """check if produit exist in table history."""
         try:
             products = History(id=product)
             self.session.add(products)
@@ -29,20 +28,20 @@ class Interaction:
         except exc.IntegrityError:
             self.session.rollback()
             print(
-                Fore.LIGHTRED_EX +
-                f"\n Produit(s) ID : {product} déjà présent(s) \n"
+                Fore.LIGHTRED_EX
+                + f"\n Produit(s) ID : {product} déjà présent(s) \n"
                 + Style.RESET_ALL
             )
         else:
             self.session.commit()
             print(
-                Fore.LIGHTGREEN_EX +
-                f"\n Produit(s) ID : {product} sauvegardé(s) \n"
+                Fore.LIGHTGREEN_EX
+                + f"\n Produit(s) ID : {product} sauvegardé(s) \n"
                 + Style.RESET_ALL
             )
 
     def get_product(self):
-        """show selectable product list"""
+        """show selectable product list."""
 
         field = "category_name"
         self.product_list = []
@@ -62,12 +61,11 @@ class Interaction:
             .join(Product)
             .limit(10)
         )
-
         for product in products:
             self.product_list.append(product)
 
     def get_product_detail(self):
-        """show the product detail"""
+        """show the product detail."""
 
         field = "id"
         self.product_detail = []
@@ -86,12 +84,11 @@ class Interaction:
             .filter(getattr(Product, field) == self.value)
             .limit(1)
         )
-
         for product in products:
             self.product_detail.append(product)
 
     def get_product_substitute(self):
-        """find the product substitute"""
+        """find the product substitute."""
 
         field = "category_name"
         field_2 = "nutriscore_fr"
@@ -115,23 +112,19 @@ class Interaction:
             .join(Product)
             .limit(1)
         )
-
         for product in products:
             self.product_list.append(product)
 
     def save_history(self):
-        """save the substitute product and the original
-            in the history table"""
+        """save the substitute product and the original in the history
+        table."""
 
-        for product in zip(self.product_detail,self.product_list):
-            
+        for product in zip(self.product_detail, self.product_list):
             self.insert_product(product[0][6])
-        
             self.insert_product(product[1][6])
 
-    
     def show_history(self):
-        """show the saved product into the history table"""
+        """show the saved product into the history table."""
 
         self.history_result = []
 
@@ -157,7 +150,7 @@ class Interaction:
             self.history_result.append(history)
 
     def delete_history(self):
-        """delete products in history table"""
+        """delete products in history table."""
 
         self.session.query(History).delete()
         self.session.commit()

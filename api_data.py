@@ -1,13 +1,16 @@
 import requests
 from sqlalchemy.orm import sessionmaker
+
 from sql_setup import Sqlconnection
 from base import Product, Category, Store
 import config
 
 
 class Data:
-    """retrieve datas of openfoodfact api"""
+    """retrieve datas of openfoodfact api."""
+
     def __init__(self):
+        """initializing all variables."""
 
         self.sql_setup = Sqlconnection()
         Session = sessionmaker(bind=self.sql_setup.engine)
@@ -15,7 +18,7 @@ class Data:
         self.categories = config.CATEGORIES
 
     def get_products_from_france(self):
-        """get all products from openfoodfact api"""
+        """get all products from openfoodfact api."""
         for category in self.categories:
 
             params = {
@@ -39,6 +42,8 @@ class Data:
             self.products = self.result["products"]
 
             for product in self.products:
+
+                # check if all field are presents
 
                 self.products = [
                     product.update(categories=category)
@@ -80,6 +85,8 @@ class Data:
 
                 p3 = Store(id=code, store_name=store_name)
                 p1.stores.append(p3)
+
+                # insert the products in the tables
 
                 self.session.add(p1)
         self.session.commit()
