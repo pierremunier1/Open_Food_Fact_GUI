@@ -19,19 +19,19 @@ WELCOME = [
     "Quit",
 ]
 
+CATEGORIES = [
+    "Confitures de fruits rouges",
+    "Pâtes à tartiner aux noisettes",
+    "Brioches",
+    "Jus de fruits",
+]
+
 HISTORY = [
     "Sauvegarder produit(s)",
     "Consulter produit(s)",
     "Supprimer produit(s)",
     "Rechercher un produit",
     "Quit",
-]
-
-CATEGORIES = [
-    "Confitures de fruits rouges",
-    "Pâtes à tartiner aux noisettes",
-    "Brioches",
-    "Jus de fruits",
 ]
 
 # API configuration, items and filters

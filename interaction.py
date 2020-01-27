@@ -36,7 +36,7 @@ class Interaction:
             self.session.commit()
             print(
                 Fore.LIGHTGREEN_EX
-                + f"\n Produit(s) ID : {product} sauvegardé(s) \n"
+                + f"\n Substitut produit ID : {product} sauvegardé(s) \n"
                 + Style.RESET_ALL
             )
 
@@ -119,9 +119,10 @@ class Interaction:
         """save the substitute product and the original in the history
         table."""
 
-        for product in zip(self.product_detail, self.product_list):
-            self.insert_product(product[0][6])
-            self.insert_product(product[1][6])
+        for product in self.product_list:
+            self.insert_product(product[6])
+            
+            
 
     def show_history(self):
         """show the saved product into the history table."""

@@ -146,24 +146,17 @@ class App:
         self.menu_substitute = True
         self.menu_selectable = False
 
-        if self.interaction.product_detail[0][3] == "a":
+        print("\n PRODUIT AVEC UN NUTRISCORE PLUS FAIBLE: \n")
+        self.interaction.get_product_substitute()
+        if (len(self.interaction.product_list)) == 0:
             print(
                 Fore.LIGHTGREEN_EX
-                + "\n Produit disposant d'un très bon nutriscore ! \n"
+                + "\n Pas de substitut plus sain \n"
                 + Style.RESET_ALL
             )
-        else:
-            print("\n PRODUIT AVEC UN NUTRISCORE PLUS FAIBLE: \n")
-            self.interaction.get_product_substitute()
-            if (len(self.interaction.product_list)) == 0:
-                print(
-                    Fore.LIGHTGREEN_EX
-                    + "\n Pas de substitut plus sain \n"
-                    + Style.RESET_ALL
-                )
-            self.choice = self.input_product_detail(
-                self.interaction.product_list, validator=self.is_valid
-            )
+        self.choice = self.input_product_detail(
+            self.interaction.product_list, validator=self.is_valid
+        )
         self.sub_menu_history()
 
     def sub_menu_history(self):
